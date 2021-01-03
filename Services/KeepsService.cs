@@ -29,19 +29,33 @@ namespace keepr.Services
       //   return _repo.Get().ToList().FindAll(keep => keep.IsAvailable);
     }
 
+    internal IEnumerable<Keep> GetKeepsByProfile(string profileId, string id)
+    {
+      return _repo.GetKeepsByProfile(profileId);
+    }
+
     // internal IEnumerable<Keep> GetKeepsByProfile(string profileId, string userId)
     // {
 
     //   return _repo.getKeepsByProfile(profileId).ToList().FindAll(keep => keep.CreatorId == userId || keep.IsAvailable);
     // }
 
-    internal string Delete(int id)
+    internal string Delete(int id, Profile userInfo)
     {
-      if (_repo.Delete(id))
+      Keep returnedKeep = _repo.GetOne(id);
+      if (userInfo.Id == returnedKeep.CreatorId)
       {
-        return "Deleted!";
+        if (_repo.Delete(id))
+        {
+          return "Deleted!";
+        }
+        return "Unable to be deleted";
+
       }
-      return "Unable to be deleted";
+      else
+      {
+        return "Access Denied";
+      }
     }
 
     internal Keep GetOne(int id)

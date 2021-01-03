@@ -30,7 +30,7 @@ namespace keepr.Repositories
 
     internal IEnumerable<Vault> Get(string profileId)
     {
-      string sql = populateCreator + "WHERE vault.creatorId = @profileId";
+      string sql = populateCreator;
       return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) => { vault.Creator = profile; return vault; }, new { profileId }, splitOn: "id");
     }
 
@@ -44,6 +44,19 @@ namespace keepr.Repositories
       isPrivate = @IsPrivate
 WHERE id = @Id;";
       _db.Execute(sql, editedVault);
+    }
+
+    internal IEnumerable<Vault> GetVaultsByProfile(string profileId)
+    {
+      string sql = @"
+                SELECT
+                vault.*,
+                profile.*
+                FROM vaults vault
+                JOIN profiles profile ON
+                vault.creatorId = profile.id;
+";
+      return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) => { vault.Creator = profile; return vault; }, new { profileId }, splitOn: "id");
     }
 
     internal bool Delete(int id)

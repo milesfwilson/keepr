@@ -14,10 +14,12 @@ namespace keepr.Controllers
   public class VaultsController : ControllerBase
   {
     private readonly VaultsService _vaultsService;
+    private readonly VaultKeepsService _vaultKeepsService;
 
-    public VaultsController(VaultsService vaultsService)
+    public VaultsController(VaultsService vaultsService, VaultKeepsService vaultKeepsService)
     {
       _vaultsService = vaultsService;
+      _vaultKeepsService = vaultKeepsService;
     }
 
     [HttpPost]
@@ -55,31 +57,33 @@ namespace keepr.Controllers
     }
 
     [HttpGet("{id}")]
+    [Authorize]
 
-    public ActionResult<IEnumerable<Vault>> GetOne(int id)
+    public async Task<ActionResult<Vault>> GetOne(int id)
     {
       try
       {
-        return Ok(_vaultsService.GetOne(id));
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        return Ok(_vaultsService.GetOne(id, userInfo));
       }
       catch (System.Exception error)
       {
         return BadRequest(error.Message);
       }
     }
-    // [HttpGet("{id}/Vaultsitem")]
+    [HttpGet("{id}/keeps")]
 
-    // public ActionResult<IEnumerable<Vaults>> GetItemsByVaultsId(int id)
-    // {
-    //   try
-    //   {
-    //     return Ok(_VaultsItemService.GetItemsByVaultsId(id));
-    //   }
-    //   catch (System.Exception error)
-    //   {
-    //     return BadRequest(error.Message);
-    //   }
-    // }
+    public ActionResult<IEnumerable<Vault>> GetKeepsByVaultId(int id)
+    {
+      try
+      {
+        return Ok(_vaultKeepsService.GetKeepsByVaultId(id));
+      }
+      catch (System.Exception error)
+      {
+        return BadRequest(error.Message);
+      }
+    }
 
     [HttpPut("{id}")]
     [Authorize]
@@ -99,11 +103,13 @@ namespace keepr.Controllers
 
 
     [HttpDelete("{id}")]
-    public ActionResult<string> Delete(int id)
+    [Authorize]
+    public async Task<ActionResult<string>> Delete(int id)
     {
       try
       {
-        return Ok(_vaultsService.Delete(id));
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        return Ok(_vaultsService.Delete(id, userInfo));
       }
       catch (System.Exception error)
       {

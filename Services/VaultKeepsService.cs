@@ -26,13 +26,22 @@ namespace keepr.Services
       return _repo.Get();
     }
 
-    internal string Delete(int id)
+    internal string Delete(int id, Profile userInfo)
     {
-      if (_repo.Delete(id))
+      VaultKeep returnedVaultKeep = _repo.GetOne(id);
+      if (returnedVaultKeep.CreatorId == userInfo.Id)
       {
-        return "Deleted!";
+
+        if (_repo.Delete(id))
+        {
+          return "Deleted!";
+        }
+        return "Unable to be deleted";
       }
-      return "Unable to be deleted";
+      else
+      {
+        return "Access Denied";
+      }
     }
 
     internal VaultKeep GetOne(int id)
@@ -53,6 +62,11 @@ namespace keepr.Services
       }
       _repo.Edit(editedVaultKeep);
       return _repo.GetOne(editedVaultKeep.Id);
+    }
+
+    internal object GetKeepsByVaultId(int id)
+    {
+      return _repo.GetKeepsByVaultId(id);
     }
 
     // internal object GetItemsByListId(int id)

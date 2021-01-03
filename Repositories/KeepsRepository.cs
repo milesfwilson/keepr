@@ -30,6 +30,18 @@ namespace keepr.Repositories
       return _db.ExecuteScalar<int>(sql, newKeep);
     }
 
+    internal IEnumerable<Keep> GetKeepsByProfile(string profileId)
+    {
+      string sql = @"
+            SELECT 
+            keep.*,
+            profile.*
+            FROM keeps keep
+            JOIN profiles profile ON keep.creatorId = profile.id;
+";
+      return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { profileId }, splitOn: "id");
+    }
+
     // internal IEnumerable<Keep> getKeepsByProfile(string profileId)
     // {
     //   string sql = @"

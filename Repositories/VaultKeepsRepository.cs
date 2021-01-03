@@ -52,20 +52,21 @@ WHERE id = @Id;";
       return affectedRows > 0;
     }
 
-    // internal IEnumerable<Item> GetItemsByListId(int listId)
-    // {
-    //   string sql = @"
-    //     SELECT item.*,
-    //     listitem.id as VaultKeepId,
-    //     profile.*
-    //     FROM listitems listitem
-    //     JOIN items item ON item.id = listitem.itemId
-    //     JOIN profiles profile ON profile.id = item.creatorId
-    //     WHERE listId = @ListId;
-    //     ";
-    //   return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (item, profile) => { item.Creator = profile; return item; }, new { listId }, splitOn: "id");
+    internal object GetKeepsByVaultId(int id)
+    {
+      string sql = @"
+               SELECT keep.*,
+               vaultkeep.id as VaultKeepId,
+               profile.*
+               FROM vaultkeeps vaultkeep
+               JOIN keeps keep ON keep.id = vaultkeep.keepId
+               JOIN profiles profile ON profile.id = keep.creatorId
+               WHERE vaultId = @id; 
+                    ";
+      return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { id }, splitOn: "id");
 
-    // }
+    }
+
 
     internal VaultKeep GetOne(int id)
     {
