@@ -41,6 +41,20 @@ namespace keepr.Controllers
       }
     }
 
+    [HttpGet("{profileId}")]
+    public async Task<ActionResult<Profile>> GetProfileById(string profileId)
+    {
+      try
+      {
+        return Ok(_profileService.GetProfileById(profileId));
+      }
+      catch (System.Exception error)
+      {
+
+        return BadRequest(error.Message);
+      }
+    }
+
     [HttpGet("{profileId}/vaults")]
     public async Task<ActionResult<Profile>> GetVaultsByProfile(string profileId)
     {
