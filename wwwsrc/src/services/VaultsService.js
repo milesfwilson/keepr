@@ -21,19 +21,21 @@ class VaultsService {
     }
   }
 
-  async create(newVault) {
+  async create(newVault, profileId) {
     try {
       await api.post('api/vaults/', newVault)
       this.get()
+      this.getVaultsByProfile(profileId)
     } catch (error) {
       logger.error(error)
     }
   }
 
-  async deleteVault(vaultId) {
+  async deleteVault(vaultId, profileId) {
     try {
       await api.delete('api/vaults/' + vaultId)
       this.get()
+      this.getVaultsByProfile(profileId)
     } catch (error) {
       logger.error(error)
     }
@@ -42,7 +44,9 @@ class VaultsService {
   async edit(vaultId, editedVault) {
     try {
       await api.put('api/vaults/' + vaultId, editedVault)
+      AppState.activeVault = editedVault
       this.get()
+      this.getVaultsByProfile(editedVault.creatorId)
     } catch (error) {
       logger.error(error)
     }

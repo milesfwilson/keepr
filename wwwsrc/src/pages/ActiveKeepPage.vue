@@ -1,6 +1,17 @@
 <template>
   <div class="active-keep-page">
-    <div class="row my-5 p-5">
+    <div class="row pt-5 px-4">
+      <div class="col-12 d-flex justify-content-end">
+        <button class="btn">
+          <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+        </button>
+
+        <button class="btn" @click="deleteKeep(keep.id)">
+          <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row px-5">
       <div class="col-md-6 col-12 d-flex flex-column justify-content-center">
         <!-- <div :style="'background-image: url('+keep.img+')'" class="h-100 modal-img">
         </div> -->

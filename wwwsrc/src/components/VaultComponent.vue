@@ -5,6 +5,7 @@
         <h5 class="text-center text-dark my-auto">
           {{ vault.name }}
         </h5>
+        <i v-if="vault.isPrivate" class="fa fa-eye-slash my-auto px-1" aria-hidden="true"></i>
       </div>
     </router-link>
   </div>

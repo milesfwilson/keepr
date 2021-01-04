@@ -1,35 +1,33 @@
 <template>
   <div class="active-profile-page">
-    <div class="row my-3" v-if="activeProfile">
+    <div class="row my-3 py-5" v-if="activeProfile && profile">
       <div class="col-6 d-flex justify-content-end">
-        <img :src="activeProfile.picture" class="align-self-center" alt="">
+        <img :src="activeProfile.picture" class="align-self-center rounded-circle shadow border-big" height="200" alt="">
       </div>
-      <div class="col-6">
+      <div class="col-6 d-flex flex-column justify-content-center">
         <h1>
-          {{ activeProfile.name }}
+          {{ activeProfile.email.split('@').splice(0,1).join('') }}
         </h1>
-        <h3>
+        <p class="small">
           Vaults: {{ vaults.length }}
-        </h3>
-        <h3>
+        </p>
+        <p class="small">
           Keeps: {{ keeps.length }}
-        </h3>
+        </p>
       </div>
     </div>
-    <div class="row">
+    <div class="row p-3">
       <div class="col-12 d-flex">
         <h3 class="my-auto">
           Vaults
         </h3>
-        <button class="btn mx-3">
-          <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
-        </button>
+        <create-vault-component />
       </div>
     </div>
-    <div class="row">
+    <div class="row px-5">
       <vault-component v-for="vault in vaults" :key="'vault'+vault.id" :vault-props="vault" />
     </div>
-    <div class="row">
+    <div class="row p-3">
       <div class="col-12 d-flex">
         <h3 class="my-auto">
           Keeps
@@ -54,6 +52,7 @@ import { AppState } from '../AppState'
 import { profileService } from '../services/ProfileService'
 import CreateKeepComponent from '../components/CreateKeepComponent.vue'
 import KeepComponent from '../components/KeepComponent.vue'
+import CreateVaultComponent from '../components/CreateVaultComponent.vue'
 export default {
   name: 'ActiveProfilePage',
   setup() {
@@ -64,13 +63,13 @@ export default {
       profileService.getProfileById(route.params.profileId)
     })
     return {
-      vaults: computed(() => AppState.profileVaults),
-      keeps: computed(() => AppState.profileKeeps),
+      vaults: computed(() => AppState.profileVaults.filter(v => v.creatorId === route.params.profileId)),
+      keeps: computed(() => AppState.profileKeeps.filter(k => k.creatorId === route.params.profileId)),
       activeProfile: computed(() => AppState.activeProfile),
       profile: computed(() => AppState.profile)
     }
   },
-  components: { CreateKeepComponent, KeepComponent }
+  components: { CreateKeepComponent, KeepComponent, CreateVaultComponent }
 }
 </script>
 

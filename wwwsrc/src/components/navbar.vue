@@ -56,11 +56,11 @@
             :class="{ show: state.dropOpen }"
             @click="state.dropOpen = false"
           >
-            <!-- <router-link :to="{ name: 'Profile' }">
+            <router-link :to="{ name: 'ActiveProfile', params: {profileId: profile.id}}">
               <div class="list-group-item list-group-item-action hoverable">
                 Profile
               </div>
-            </router-link> -->
+            </router-link>
             <div
               class="list-group-item list-group-item-action hoverable"
               @click="logout"
@@ -87,6 +87,7 @@ export default {
     return {
       state,
       user: computed(() => AppState.user),
+      profile: computed(() => AppState.profile),
       async login() {
         AuthService.loginWithPopup()
       },
@@ -118,6 +119,6 @@ a:hover {
   text-transform: uppercase;
 }
 .nav-item .nav-link.router-link-exact-active{
-  color: var(--primary);
+  color: var(--light);
 }
 </style>
