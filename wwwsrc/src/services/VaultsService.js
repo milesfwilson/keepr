@@ -33,8 +33,6 @@ class VaultsService {
   async deleteVault(vaultId) {
     try {
       await api.delete('api/vaults/' + vaultId)
-      const index = AppState.vaults.findIndex(k => k.id === vaultId)
-      AppState.vaults.splice(index, 1)
       this.get()
     } catch (error) {
       logger.error(error)
@@ -57,6 +55,11 @@ class VaultsService {
     } catch (error) {
       logger.error(error)
     }
+  }
+
+  setActiveVault(vault) {
+    AppState.activeVault = vault
+    logger.log(vault)
   }
 }
 

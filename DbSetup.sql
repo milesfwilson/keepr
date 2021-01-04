@@ -37,6 +37,9 @@
 
     -- ALTER TABLE keeps MODIFY tags VARCHAR(255);
 
+-- DELETE FROM vaults
+-- WHERE name like '%VAULT%';
+
 --     CREATE TABLE vaultKeeps (
 -- id INT NOT NULL AUTO_INCREMENT,
 -- vaultId INT NOT NULL,

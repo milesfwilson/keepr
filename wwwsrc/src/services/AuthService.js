@@ -5,6 +5,7 @@ import router from '../router'
 import { setBearer } from './AxiosService'
 import { keepsService } from './KeepsService'
 import { profileService } from './ProfileService'
+import { vaultsService } from './VaultsService'
 
 export const AuthService = initialize({
   domain,
@@ -24,6 +25,7 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async function() {
   await profileService.getProfile()
   AppState.user = AuthService.user
   await keepsService.get()
+  await vaultsService.get()
 
   // NOTE if there is something you want to do once the user is authenticated, place that here
 })

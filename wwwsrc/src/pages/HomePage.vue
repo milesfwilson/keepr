@@ -1,6 +1,6 @@
 <template>
   <div class="home-page">
-    <div class="row">
+    <div class="row p-5">
       <div class="card-columns">
         <keep-component v-for="keep in keeps" :key="keep.id" :keep-props="keep" />
       </div>
