@@ -43,6 +43,7 @@
 import { reactive } from 'vue'
 import $ from 'jquery'
 import { keepsService } from '../services/KeepsService'
+import { AppState } from '../AppState'
 export default {
   name: 'CreateKeepComponent',
   setup() {
@@ -58,6 +59,7 @@ export default {
       state,
       create(newKeep) {
         keepsService.create(newKeep)
+        keepsService.getKeepsByProfile(AppState.profile.id)
         $('#createKeepModal').modal('hide')
       }
     }

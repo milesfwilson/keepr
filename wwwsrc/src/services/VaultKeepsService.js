@@ -1,11 +1,12 @@
 import { AppState } from '../AppState'
 import { api } from '../services/AxiosService'
 import { logger } from '../utils/Logger'
+import { keepsService } from './KeepsService'
 
 class VaultKeepsService {
   async get() {
     try {
-      const res = await api.get('api/vaultKeeps')
+      const res = await api.get('api/vaultkeeps')
       AppState.vaultKeeps = res.data
     } catch (error) {
       logger.error(error)
@@ -14,7 +15,7 @@ class VaultKeepsService {
 
   async getOne(vaultKeepId) {
     try {
-      const res = await api.get('api/vaultKeeps/' + vaultKeepId)
+      const res = await api.get('api/vaultkeeps/' + vaultKeepId)
       AppState.activeVaultKeep = res.data
     } catch (error) {
       logger.error(error)
@@ -23,8 +24,10 @@ class VaultKeepsService {
 
   async create(newVaultKeep) {
     try {
-      await api.post('api/vaultKeeps/', newVaultKeep)
+      await api.post('api/vaultkeeps/', newVaultKeep)
       this.get()
+      AppState.activeKeep.keeps++
+      keepsService.get()
     } catch (error) {
       logger.error(error)
     }
@@ -32,9 +35,7 @@ class VaultKeepsService {
 
   async deleteVaultKeep(vaultKeepId) {
     try {
-      await api.delete('api/vaultKeeps/' + vaultKeepId)
-      const index = AppState.vaultKeeps.findIndex(k => k.id === vaultKeepId)
-      AppState.vaultKeeps.splice(index, 1)
+      await api.delete('api/vaultkeeps/' + vaultKeepId)
       this.get()
     } catch (error) {
       logger.error(error)
@@ -43,7 +44,7 @@ class VaultKeepsService {
 
   async edit(vaultKeepId, editedVaultKeep) {
     try {
-      await api.put('api/vaultKeeps/' + vaultKeepId, editedVaultKeep)
+      await api.put('api/vaultkeeps/' + vaultKeepId, editedVaultKeep)
       this.get()
     } catch (error) {
       logger.error(error)

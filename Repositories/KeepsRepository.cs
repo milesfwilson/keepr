@@ -84,7 +84,8 @@ WHERE id = @Id;";
 
     internal Keep GetOne(int id)
     {
-      string sql = "SELECT * FROM keeps WHERE id = @Id";
+      string sql = @"   UPDATE keeps SET views = views+1 WHERE id = @Id;
+                        SELECT * FROM keeps WHERE id = @Id";
       return _db.QueryFirstOrDefault<Keep>(sql, new { id });
     }
   }

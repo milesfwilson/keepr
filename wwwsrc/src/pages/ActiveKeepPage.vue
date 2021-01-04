@@ -2,9 +2,55 @@
   <div class="active-keep-page">
     <div class="row pt-5 px-4">
       <div class="col-12 d-flex justify-content-end">
-        <button class="btn">
+        <!-- Button trigger modal -->
+        <button v-if="keep.vaultKeepId || keep.creatorId == profile.id" type="button" class="btn" data-toggle="modal" data-target="#activeKeepModal">
           <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
         </button>
+
+        <!-- Modal -->
+        <div class="modal fade"
+             id="activeKeepModal"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="modelTitleId"
+             aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">
+                  Edit
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="" @submit.prevent="editKeep(keep.id, state.editedKeep)" v-if="keep.creatorId == profile.id">
+                  <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.editedKeep.name" placeholder="Keep Name" required>
+                  <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.editedKeep.description" placeholder="Keep Description" required>
+                  <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.editedKeep.img" placeholder="Keep Image URL" required>
+                  <input class="p-2 my-1 form-control w-100" type="text" v-model="state.editedKeep.tags" placeholder="Enter tags (separated with a comma)">
+                  <button class="btn btn-outline-dark btn-block">
+                    Save
+                  </button>
+                </form>
+
+                <button class="btn btn-block btn-danger radius" v-if="keep.vaultKeepId" @click="deleteVaultKeep(keep.vaultKeepId)">
+                  Remove from Vault
+                </button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  Close
+                </button>
+                <button type="button" class="btn btn-primary">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <button class="btn" @click="deleteKeep(keep.id)">
           <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
@@ -93,16 +139,23 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router'
 import router from '../router'
 import { AppState } from '../AppState'
-import { computed, reactive } from 'vue'
+import { computed, reactive, onMounted } from 'vue'
 import { vaultKeepsService } from '../services/VaultKeepsService'
 import { keepsService } from '../services/KeepsService'
+import $ from 'jquery'
 export default {
   name: 'ActiveKeepPage',
   setup() {
     const state = reactive({
-      vaultId: null
+      vaultId: null,
+      editedKeep: AppState.activeKeep
+    })
+    const route = useRoute()
+    onMounted(() => {
+      keepsService.getOne(route.params.keepId)
     })
     return {
       keep: computed(() => AppState.activeKeep),
@@ -119,7 +172,27 @@ export default {
       async deleteKeep(keepId) {
         router.push({ name: 'Home' })
         keepsService.deleteKeep(keepId)
+      },
+      async deleteVaultKeep(vaultKeepId) {
+        const vaultKeep = AppState.vaultKeeps.find(vk => vk.id === vaultKeepId)
+
+        $('#activeKeepModal').modal('hide')
+
+        await vaultKeepsService.deleteVaultKeep(vaultKeepId)
+        router.push({ name: 'ActiveVault', params: { vaultId: vaultKeep.vaultId } })
+      },
+      async editKeep(id, editedKeep) {
+        keepsService.edit(id, editedKeep)
       }
+      // async keepCount(keepId) {
+      //   let keepCountNum = 0
+      //   for (let i = 0; i < AppState.vaultKeeps.length; i++) {
+      //     if (AppState.vaultKeeps[i] === keepId) {
+      //       console.log(keepCountNum++)
+      //     }
+      //   }
+      //   return keepCountNum
+      // }
     }
   },
   components: {}

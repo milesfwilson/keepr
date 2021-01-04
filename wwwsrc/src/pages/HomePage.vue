@@ -1,11 +1,12 @@
 <template>
   <div class="home-page">
-    <div class="row">
-      <div class="col-md-1 col-12"></div>
-      <div class="col-12 col-md-10">
-        <input type="text" class="p-2 form-control w-100" v-model="state.query.name">
+    <div class="row mt-5">
+      <div class="col-sm-1 col-12"></div>
+      <div class="col-12 col-sm-10 d-flex">
+        <input type="text" class="p-4 form-control w-100 radius border-0 ml-3" placeholder="Search" v-model="state.query.name">
+        <i class="fa fa-search text-muted my-auto left" aria-hidden="true"></i>
       </div>
-      <div class="col-md-1 col-12"></div>
+      <div class="col-sm-1 col-12"></div>
     </div>
     <div class="row p-5">
       <div class="card-columns">
@@ -37,5 +38,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.radius {
+  border-radius: 25px;
+}
+.left {
+  position: relative;
+  left: -30px;
+}
 </style>

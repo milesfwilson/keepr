@@ -44,7 +44,7 @@ import { reactive, computed } from 'vue'
 import $ from 'jquery'
 import { vaultsService } from '../services/VaultsService'
 import { AppState } from '../AppState'
-
+import { notificationService } from '../services/NotificationService'
 export default {
   name: 'CreateVaultComponent',
   setup() {
@@ -61,6 +61,7 @@ export default {
       create(newVault, profileId) {
         vaultsService.create(newVault, profileId)
         $('#createVaultModal').modal('hide')
+        notificationService.hello()
       }
     }
   },

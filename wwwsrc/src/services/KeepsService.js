@@ -14,8 +14,9 @@ class KeepsService {
 
   async getOne(keepId) {
     try {
-      const res = await api.get('api/keeps/' + keepId)
-      AppState.activeKeep = res.data
+      await api.get('api/keeps/' + keepId)
+
+      this.get()
     } catch (error) {
       logger.error(error)
     }
@@ -60,6 +61,7 @@ class KeepsService {
   async getKeepsByVault(vaultId) {
     try {
       const res = await api.get('api/vaults/' + vaultId + '/keeps')
+      logger.log(res.data)
       AppState.activeKeeps = res.data
     } catch (error) {
       logger.error(error)
@@ -68,6 +70,11 @@ class KeepsService {
 
   setActiveKeep(keep) {
     AppState.activeKeep = keep
+  }
+
+  updateViewCount(keep) {
+    keep.views++
+    this.edit(keep.id, keep)
   }
 }
 

@@ -1,17 +1,5 @@
 <template>
   <div class="active-vault-page">
-    <div class="row">
-      <div class="col-12 d-flex justify-content-end">
-        <button class="btn" @click="togglePrivate(activeVault)">
-          <i v-if="!activeVault.isPrivate" class="fa fa-eye" aria-hidden="true"></i>
-          <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
-        </button>
-
-        <button class="btn" @click="deleteVault(activeVault.id, profile.id)">
-          <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
     <div class="row my-3">
       <div class="col-12 text-center">
         <h3>
@@ -23,11 +11,26 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-center">
+        <button class="btn" @click="backToVaults(activeVault.creatorId)">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+      </div>
       <div class="col-6">
         <hr>
       </div>
-      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-center">
+        <div class=" d-flex" v-if="activeVault.creatorId == profile.id">
+          <button class="btn" @click="togglePrivate(activeVault)">
+            <i v-if="!activeVault.isPrivate" class="fa fa-eye" aria-hidden="true"></i>
+            <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
+          </button>
+
+          <button class="btn" @click="deleteVault(activeVault.id, profile.id)">
+            <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="row p-5">
       <div class="card-columns">
@@ -64,6 +67,9 @@ export default {
         const editedVault = vault
         editedVault.isPrivate = !editedVault.isPrivate
         vaultsService.edit(editedVault.id, editedVault)
+      },
+      backToVaults(profileId) {
+        router.push({ name: 'ActiveProfile', params: { profileId: profileId } })
       }
     }
   },
