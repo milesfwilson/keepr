@@ -40,19 +40,11 @@
                   Remove from Vault
                 </button>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Save
-                </button>
-              </div>
             </div>
           </div>
         </div>
 
-        <button class="btn" @click="deleteKeep(keep.id)">
+        <button class="btn" @click="deleteKeep(keep.id)" v-if="keep.creatorId == profile.id">
           <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
         </button>
       </div>
@@ -111,7 +103,7 @@
         <div class="row">
           <div class="col-lg-6 col-12 d-flex justify-content-center">
             <form action="" @submit.prevent="createVaultKeep(keep.id, state.vaultId)">
-              <select v-model="state.vaultId" name="" id="">
+              <select v-model="state.vaultId" name="" id="" required>
                 <option>Select a vault</option>
                 <option v-for="vault in vaults" :key="'vault'+vault.id" :value="vault.id" required>
                   {{ vault.name }}
@@ -146,6 +138,8 @@ import { computed, reactive, onMounted } from 'vue'
 import { vaultKeepsService } from '../services/VaultKeepsService'
 import { keepsService } from '../services/KeepsService'
 import $ from 'jquery'
+import swal from 'sweetalert'
+
 export default {
   name: 'ActiveKeepPage',
   setup() {
@@ -166,20 +160,57 @@ export default {
           keepId: keepId,
           vaultId: vaultId
         }
+
         vaultKeepsService.create(newVaultKeep)
       },
       state,
       async deleteKeep(keepId) {
-        router.push({ name: 'Home' })
-        keepsService.deleteKeep(keepId)
+        swal({
+          title: 'Are you sure?',
+          text: 'Once deleted, you will not be able to get your keep back',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal('Deleted!', {
+                icon: 'success'
+              })
+              router.push({ name: 'Home' })
+              keepsService.deleteKeep(keepId)
+            } else {
+              swal('Your keep is safe!')
+            }
+          })
       },
-      async deleteVaultKeep(vaultKeepId) {
+      deleteVaultKeep(vaultKeepId) {
         const vaultKeep = AppState.vaultKeeps.find(vk => vk.id === vaultKeepId)
 
-        $('#activeKeepModal').modal('hide')
+        swal({
+          title: 'Are you sure?',
+          text: 'You can always store this keep in a vault later',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal('Deleted!', {
+                icon: 'success'
+              })
 
-        await vaultKeepsService.deleteVaultKeep(vaultKeepId)
-        router.push({ name: 'ActiveVault', params: { vaultId: vaultKeep.vaultId } })
+              $('#activeKeepModal').modal('hide')
+              if (vaultKeep) {
+                keepsService.getKeepsByVault(vaultKeep.vaultId)
+                router.push({ name: 'ActiveVault', params: { vaultId: vaultKeep.vaultId } })
+              }
+              vaultKeepsService.deleteVaultKeep(vaultKeepId)
+            } else {
+              swal('Your vault keep is safe!')
+              keepsService.getKeepsByVault(vaultKeep.vaultId)
+            }
+          })
       },
       async editKeep(id, editedKeep) {
         keepsService.edit(id, editedKeep)

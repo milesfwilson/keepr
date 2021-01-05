@@ -47,6 +47,7 @@ import { useRoute } from 'vue-router'
 import { computed, onMounted } from 'vue'
 import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
+import swal from 'sweetalert'
 export default {
   name: 'ActiveVaultPage',
   setup() {
@@ -60,8 +61,24 @@ export default {
       activeKeeps: computed(() => AppState.activeKeeps),
       profile: computed(() => AppState.profile),
       deleteVault(vaultId, profileId) {
-        vaultsService.deleteVault(vaultId, profileId)
-        router.push({ name: 'ActiveProfile', params: { profileId: profileId } })
+        swal({
+          title: 'Are you sure?',
+          text: 'Once deleted, you will not be able to get your vault back',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal('Deleted!', {
+                icon: 'success'
+              })
+              vaultsService.deleteVault(vaultId, profileId)
+              router.push({ name: 'ActiveProfile', params: { profileId: profileId } })
+            } else {
+              swal('Your imaginary file is safe!')
+            }
+          })
       },
       togglePrivate(vault) {
         const editedVault = vault

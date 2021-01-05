@@ -1,6 +1,7 @@
 import { AppState } from '../AppState'
 import { api } from '../services/AxiosService'
 import { logger } from '../utils/Logger'
+import { notificationService } from './NotificationService'
 
 class VaultsService {
   async get() {
@@ -24,6 +25,7 @@ class VaultsService {
   async create(newVault, profileId) {
     try {
       await api.post('api/vaults/', newVault)
+      notificationService.success()
       this.get()
       this.getVaultsByProfile(profileId)
     } catch (error) {
