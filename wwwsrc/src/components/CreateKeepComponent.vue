@@ -60,6 +60,8 @@ export default {
       state,
       create(newKeep) {
         keepsService.create(newKeep)
+        state.newKeep = {}
+
         $('#createKeepModal').modal('hide')
         notificationService.success()
       }

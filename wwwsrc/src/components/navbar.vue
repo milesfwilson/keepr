@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark nav-gradient">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
-        <h3><i class="fa fa-bookmark fa mr-1"></i> keepr</h3>
+        <h3><i class="fa fa-bookmark fa mr-1"></i> k e e p e r</h3>
       </div>
     </router-link>
     <button

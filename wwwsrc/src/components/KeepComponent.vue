@@ -5,7 +5,7 @@
     <div class="card-img-overlay d-flex justify-content-end flex-column card-hover radius">
       <div class="">
         <div class="d-flex justify-content-between">
-          <button type="button" class="btn text-light" data-toggle="modal" :data-target="'#keepModal'+keep.id" @click="getOne(keep.id, keep)">
+          <button type="button" class="btn text-light no-select" data-toggle="modal" :data-target="'#keepModal'+keep.id" @click="getOne(keep.id, keep)">
             <h4 class="card-title text-center">
               {{ keep.name }}
             </h4>
@@ -26,11 +26,13 @@
          aria-hidden="true"
     >
       <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content ">
           <div class="modal-body">
             <div class="row">
               <div class="col-6">
-                <img :src="keep.img" class="img-fluid" alt="">
+                <div class="w-100 modal-img" :style="'background-image: url('+keep.img+');' ">
+                </div>
+                <!-- <img :src="keep.img" class="img-fluid" alt=""> -->
               </div>
               <div class="col-6 d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-end">
@@ -258,4 +260,15 @@ button {
 .no-decoration {
   text-decoration: none;
 }
+
+.modal-img {
+background-position: center;
+background-size: cover;
+height: 80vh;
+}
+
+  .no-select {
+outline: none;
+box-shadow: none;
+  }
 </style>

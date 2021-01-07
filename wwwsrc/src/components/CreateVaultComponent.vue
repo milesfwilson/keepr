@@ -61,6 +61,7 @@ export default {
       create(newVault, profileId) {
         vaultsService.create(newVault, profileId)
         $('#createVaultModal').modal('hide')
+        state.newVault = {}
         notificationService.success()
       }
     }
