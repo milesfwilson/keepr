@@ -1,7 +1,7 @@
 <template>
   <div class="create-keep-component">
     <button class="btn mx-3" data-toggle="modal" data-target="#createKeepModal">
-      <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+      <i class="fa fa-plus text-muted fa-2x" aria-hidden="true"></i>
     </button>
 
     <!-- Modal -->
@@ -28,7 +28,7 @@
               <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.newKeep.description" placeholder="Keep Description" required>
               <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.newKeep.img" placeholder="Keep Image URL" required>
               <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.newKeep.tags" placeholder="Enter tags (separated with a comma)">
-              <button class="btn btn-outline-dark btn-block">
+              <button class="btn btn-outline-dark btn-block radius">
                 Create
               </button>
             </form>
@@ -43,6 +43,7 @@
 import { reactive } from 'vue'
 import $ from 'jquery'
 import { keepsService } from '../services/KeepsService'
+import { notificationService } from '../services/NotificationService'
 
 export default {
   name: 'CreateKeepComponent',
@@ -59,8 +60,8 @@ export default {
       state,
       create(newKeep) {
         keepsService.create(newKeep)
-
         $('#createKeepModal').modal('hide')
+        notificationService.success()
       }
     }
   },

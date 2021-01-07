@@ -10,5 +10,6 @@ export const AppState = reactive({
   profileKeeps: [],
   activeKeeps: [],
   activeVault: {},
-  profileVaults: []
+  profileVaults: [],
+  sortBy: ''
 })

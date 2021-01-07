@@ -1,7 +1,7 @@
 <template>
   <div class="create-vault-component">
     <button class="btn mx-3" data-toggle="modal" data-target="#createVaultModal">
-      <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+      <i class="fa fa-plus text-muted fa-2x" aria-hidden="true"></i>
     </button>
 
     <!-- Modal -->
@@ -26,9 +26,9 @@
             <form action="" @submit.prevent="create(state.newVault, profile.id)">
               <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.newVault.name" placeholder="Vault Name" required>
               <input class=" p-2 my-1 form-control w-100" type="text" v-model="state.newVault.description" placeholder="Vault Description" required>
-              <label for="" class="small">Private?</label>
-              <input class=" p-2 my-1 form-control" type="checkbox" v-model="state.newVault.isPrivate">
-              <button class="btn btn-outline-dark btn-block">
+              <label for="" class="small mr-3">Private?</label>
+              <input class=" p-2 my-1" type="checkbox" v-model="state.newVault.isPrivate">
+              <button class="btn btn-outline-dark btn-block radius">
                 Create
               </button>
             </form>
@@ -61,7 +61,7 @@ export default {
       create(newVault, profileId) {
         vaultsService.create(newVault, profileId)
         $('#createVaultModal').modal('hide')
-        notificationService.hello()
+        notificationService.success()
       }
     }
   },

@@ -48,6 +48,7 @@ import { computed, onMounted } from 'vue'
 import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
 import swal from 'sweetalert'
+import { notificationService } from '../services/NotificationService'
 export default {
   name: 'ActiveVaultPage',
   setup() {
@@ -76,7 +77,7 @@ export default {
               vaultsService.deleteVault(vaultId, profileId)
               router.push({ name: 'ActiveProfile', params: { profileId: profileId } })
             } else {
-              swal('Your imaginary file is safe!')
+              swal('Your vault is safe!')
             }
           })
       },
@@ -84,6 +85,7 @@ export default {
         const editedVault = vault
         editedVault.isPrivate = !editedVault.isPrivate
         vaultsService.edit(editedVault.id, editedVault)
+        notificationService.success()
       },
       backToVaults(profileId) {
         router.push({ name: 'ActiveProfile', params: { profileId: profileId } })

@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark nav-gradient">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
-        <h3>keepr</h3>
+        <h3><i class="fa fa-bookmark fa mr-1"></i> keepr</h3>
       </div>
     </router-link>
     <button
@@ -49,20 +49,20 @@
               height="50"
               class="rounded-circle"
             />
-
+            {{ user.name.split('@').splice(0,1).join('') }}
           </div>
           <div
-            class="dropdown-menu p-0 list-group w-100"
+            class="dropdown-menu list-group radius"
             :class="{ show: state.dropOpen }"
             @click="state.dropOpen = false"
           >
             <router-link :to="{ name: 'ActiveProfile', params: {profileId: profile.id}}">
-              <div class="list-group-item list-group-item-action hoverable">
+              <div class="list-group-item list-group-item-action hoverable border-0 bg-transparent">
                 Profile
               </div>
             </router-link>
             <div
-              class="list-group-item list-group-item-action hoverable"
+              class="list-group-item list-group-item-action hoverable border-0 bg-transparent"
               @click="logout"
             >
               Logout
@@ -106,7 +106,12 @@ export default {
   transform: scale(0);
   transition: all 0.15s linear;
 }
+
+.list-group  {
+
+}
 .dropdown-menu.show {
+
   transform: scale(1);
 }
 .hoverable {
@@ -121,4 +126,5 @@ a:hover {
 .nav-item .nav-link.router-link-exact-active{
   color: var(--light);
 }
+
 </style>

@@ -1,31 +1,42 @@
 <template>
   <div class="active-profile-page">
-    <div class="row my-3 py-5" v-if="activeProfile && profile">
-      <div class="col-6 d-flex justify-content-end">
-        <img :src="activeProfile.picture" class="align-self-center rounded-circle shadow border-big" height="200" alt="">
+    <div class="row py-4" v-if="activeProfile && profile">
+      <div class="col-md-4 col-12 d-flex justify-content-center">
+        <div class="text-center shadow radius  p-3 bg-light border text-dark">
+          <img :src="activeProfile.picture" class="align-self-center rounded-circle shadow border-big" height="200" alt="">
+          <div class="pt-2">
+            <h1>
+              {{ activeProfile.email.split('@').splice(0,1).join('') }}
+            </h1>
+            <div class="d-flex justify-content-around">
+              <p class="small p-2 radius  bg-light ">
+                Keeps: {{ keeps.length }}
+              </p>
+              <p class="small p-2 radius  bg-light ">
+                Vaults: {{ vaults.length }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-6 d-flex flex-column justify-content-center">
-        <h1>
-          {{ activeProfile.email.split('@').splice(0,1).join('') }}
-        </h1>
-        <p class="small">
-          Vaults: {{ vaults.length }}
-        </p>
-        <p class="small">
-          Keeps: {{ keeps.length }}
-        </p>
+      <div class="col-md-8 col-12 d-flex flex-column justify-content-center">
+        <div class="d-flex">
+          <h3 class="my-auto">
+            Vaults
+          </h3>
+          <create-vault-component />
+        </div>
+        <div class="row d-flex justify-content-around px-5">
+          <vault-component v-for="vault in vaults" :key="'vault'+vault.id" :vault-props="vault" />
+        </div>
       </div>
     </div>
-    <div class="row p-3">
-      <div class="col-12 d-flex">
-        <h3 class="my-auto">
-          Vaults
-        </h3>
-        <create-vault-component />
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <hr>
       </div>
-    </div>
-    <div class="row px-5">
-      <vault-component v-for="vault in vaults" :key="'vault'+vault.id" :vault-props="vault" />
+      <div class="col-3"></div>
     </div>
     <div class="row p-3">
       <div class="col-12 d-flex">
@@ -35,7 +46,7 @@
         <create-keep-component />
       </div>
     </div>
-    <div class="row p-5">
+    <div class="row px-5">
       <div class="card-columns">
         <keep-component v-for="keep in keeps" :key="'keep'+keep.id" :keep-props="keep" />
       </div>

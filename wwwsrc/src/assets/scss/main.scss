@@ -34,3 +34,33 @@
   .border-big {
     border: 7px solid white;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+
+  }
+
+  .nav-gradient {
+    background: #292929;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #292929, #3a3a3a);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #292929, #3a3a3a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  body {
+
+      background: #dfdfdf;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ffffff, #e4e4e4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffffff, #e4e4e4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+    
+  }
+
+  .profile {
+    background: #dbdbdb;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #dbdbdb, #929292);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #dbdbdb, #929292); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }

@@ -1,8 +1,8 @@
 <template>
-  <div class="keep-component card radius bg-transparent border-0">
+  <div class="keep-component card radius bg-transparent border-0 shadow">
     <!-- <router-link :to="{name: 'ActiveKeep', params: {keepId: keep.id}}" class="text-dark " @click="setActiveKeep(keep)"> -->
     <img class="card-img-top radius  " :src="keep.img" alt="Card image">
-    <div class="card-img-overlay d-flex justify-content-end flex-column card-hover">
+    <div class="card-img-overlay d-flex justify-content-end flex-column card-hover radius">
       <div class="">
         <div class="d-flex justify-content-between">
           <button type="button" class="btn text-light" data-toggle="modal" :data-target="'#keepModal'+keep.id" @click="getOne(keep.id, keep)">
@@ -62,7 +62,7 @@
                 <h3 class="modal-title text-center">
                   {{ keep.name }}
                 </h3>
-                <p class="small text-center">
+                <p class="text-center">
                   {{ keep.description }}
                 </p>
 
@@ -70,15 +70,17 @@
 
                 <div class="row" v-if="keep.tags">
                   <div class="col-12 d-flex justify-content-around">
-                    <p v-for="tag in keep.tags.split(',')" :key="tag+keep.id" class="border radius p-2 btn-outline-dark">
-                      {{ tag }}
-                    </p>
+                    <div v-for="tag in keep.tags.split(', ')" :key="tag+keep.id">
+                      <button class="border btn radius p-2 btn-outline-dark" @click="closeModal(keep.id); sort(tag)">
+                        {{ tag }}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12 ">
-                    <router-link :to="{name: 'ActiveVault', params: {vaultId: state.vaultId}}" @click="closeModal(keep.id)" v-if="state.vaultId">
-                      <div class="d-flex justify-content-center">
+                    <router-link :to="{name: 'ActiveVault', params: {vaultId: state.vaultId}}" @click="closeModal(keep.id)" v-if="state.vaultId" class="no-decoration">
+                      <div class="d-flex justify-content-center no-decoration grow">
                         <p class="text-dark my-auto small no-decoration">
                           Go to Vault
                         </p>
@@ -98,7 +100,7 @@
                           {{ vault.name }}
                         </option>
                       </select>
-                      <button class="btn btn-outline-dark btn-block radius">
+                      <button class="btn btn-outline-dark btn-block radius mt-1">
                         Add to Vault
                       </button>
                     </form>
@@ -213,6 +215,9 @@ export default {
               swal('Your vault keep is safe!')
             }
           })
+      },
+      sort(tag) {
+        console.log(tag)
       }
     }
   },
@@ -231,10 +236,10 @@ export default {
 }
 
 .card-hover:hover {
-background: rgba(0, 0, 0, 0.479);
+background: rgba(0, 0, 0, 0.637);
 color: rgba(255, 255, 255, 0.774);
 border-radius: 15px;
-transition: all .3s ease-in-out;
+transition: all .4s ease-in-out;
 
 }
 
