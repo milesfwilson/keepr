@@ -18,7 +18,8 @@
 
 <script>
 import { AppState } from '../AppState'
-import { computed, reactive } from 'vue'
+import { computed, reactive, onMounted } from 'vue'
+import { keepsService } from '../services/KeepsService'
 export default {
   name: 'HomePage',
   setup() {
@@ -26,6 +27,9 @@ export default {
       query: {
         name: ''
       }
+    })
+    onMounted(() => {
+      keepsService.get()
     })
     return {
       state,

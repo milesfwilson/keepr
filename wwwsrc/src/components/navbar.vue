@@ -31,11 +31,11 @@
       </ul>
       <span class="navbar-text">
         <button
-          class="btn btn-outline-primary text-uppercase"
+          class="btn"
           @click="login"
           v-if="!user.isAuthenticated"
         >
-          Login
+          <i class="fa fa-user-circle-o fa-2x text-light" aria-hidden="true"></i>
         </button>
 
         <div class="dropdown" v-else>

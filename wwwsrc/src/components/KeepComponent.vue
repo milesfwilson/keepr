@@ -2,16 +2,18 @@
   <div class="keep-component card radius bg-transparent border-0">
     <!-- <router-link :to="{name: 'ActiveKeep', params: {keepId: keep.id}}" class="text-dark " @click="setActiveKeep(keep)"> -->
     <img class="card-img-top radius  " :src="keep.img" alt="Card image">
-    <div class="card-img-overlay d-flex justify-content-between flex-column card-hover">
-      <button type="button" class="btn text-light" data-toggle="modal" :data-target="'#keepModal'+keep.id" @click="getOne(keep.id)">
-        <h4 class="card-title text-center">
-          {{ keep.name }}
-        </h4>
-      </button>
-      <div class="d-flex justify-content-end">
-        <router-link :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
-          <img :src="keep.creator.picture" class="rounded-circle shadow" height="40">
-        </router-link>
+    <div class="card-img-overlay d-flex justify-content-end flex-column card-hover">
+      <div class="">
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn text-light" data-toggle="modal" :data-target="'#keepModal'+keep.id" @click="getOne(keep.id, keep)">
+            <h4 class="card-title text-center">
+              {{ keep.name }}
+            </h4>
+          </button>
+          <router-link :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
+            <img :src="keep.creator.picture" class="rounded-circle shadow" height="40">
+          </router-link>
+        </div>
       </div>
     </div>
 
@@ -57,9 +59,9 @@
                     {{ keep.shares }}
                   </p>
                 </div>
-                <h5 class="modal-title text-center">
+                <h3 class="modal-title text-center">
                   {{ keep.name }}
-                </h5>
+                </h3>
                 <p class="small text-center">
                   {{ keep.description }}
                 </p>
@@ -68,28 +70,42 @@
 
                 <div class="row" v-if="keep.tags">
                   <div class="col-12 d-flex justify-content-around">
-                    <p v-for="tag in keep.tags.split(',')" :key="tag+keep.id" class="border rounded p-1 btn-outline-dark">
+                    <p v-for="tag in keep.tags.split(',')" :key="tag+keep.id" class="border radius p-2 btn-outline-dark">
                       {{ tag }}
                     </p>
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-12 ">
+                    <router-link :to="{name: 'ActiveVault', params: {vaultId: state.vaultId}}" @click="closeModal(keep.id)" v-if="state.vaultId">
+                      <div class="d-flex justify-content-center">
+                        <p class="text-dark my-auto small no-decoration">
+                          Go to Vault
+                        </p>
+                        <i class="ml-3 fa fa-arrow-right text-dark my-auto no-decoration" aria-hidden="true"></i>
+                      </div>
+                    </router-link>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-6">
-                    <form action="" @submit.prevent="createVaultKeep(keep.id, state.vaultId)">
-                      <select v-model="state.vaultId" name="" :id="'keepVaultSelect'+keep.id" class="w-100" required>
-                        <option>Select a vault</option>
+                    <form action="" @submit.prevent="createVaultKeep(keep.id, state.vaultId, keep)">
+                      <select v-model="state.vaultId" name="" :id="'keepVaultSelect'+keep.id" class="w-100 radius p-1" required>
+                        <option value="0">
+                          Select Vault
+                        </option>
                         <option v-for="vault in vaults" :key="'keep'+keep.id+'vault'+vault.id" :value="vault.id" required>
                           {{ vault.name }}
                         </option>
                       </select>
-                      <button class="btn btn-outline-dark btn-block">
+                      <button class="btn btn-outline-dark btn-block radius">
                         Add to Vault
                       </button>
                     </form>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6 d-flex flex-column justify-content-center">
                     <router-link class="text-dark " :to="{name: 'ActiveProfile', params: {profileId: keep.creator.id}}" @click="closeModal(keep.id)">
-                      <div class="d-flex justify-content-end">
+                      <div class="d-flex justify-content-center">
                         <p class="small my-auto mr-2">
                           {{ keep.creator.email.split('@').splice(0,1).join('') }}
                         </p>
@@ -130,23 +146,25 @@ export default {
       state,
       keep: computed(() => props.keepProps),
       profile: computed(() => AppState.profile),
+      activeKeep: computed(() => AppState.activeKeep),
       vaults: computed(() => AppState.vaults.filter(v => v.creatorId === AppState.profile.id)),
       async setActiveKeep(keep) {
         keepsService.setActiveKeep(keep)
       },
-      async getOne(id) {
+      async getOne(id, keep) {
         keepsService.getOne(id)
+        keepsService.setActiveKeep(keep)
       },
       navigateToActiveKeep(keep) {
-        keepsService.setActiveKeep(keep)
         router.push({ name: 'ActiveKeep', params: { keepId: keep.id } })
       },
-      createVaultKeep(keepId, vaultId) {
+      createVaultKeep(keepId, vaultId, keep) {
         const newVaultKeep = {
           keepId: keepId,
           vaultId: vaultId
         }
-
+        AppState.activeKeep = keep
+        AppState.activeKeep.shares++
         vaultKeepsService.create(newVaultKeep)
       },
       closeModal(keepId) {
@@ -230,5 +248,9 @@ button {
 
 .hoverable {
   cursor: pointer;
+}
+
+.no-decoration {
+  text-decoration: none;
 }
 </style>

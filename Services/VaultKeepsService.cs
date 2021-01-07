@@ -10,15 +10,28 @@ namespace keepr.Services
 
     private readonly VaultKeepsRepository _repo;
 
-    public VaultKeepsService(VaultKeepsRepository repo)
+    private readonly VaultsService _vaultService;
+
+    public VaultKeepsService(VaultKeepsRepository repo, VaultsService vaultService)
     {
       _repo = repo;
+      _vaultService = vaultService;
     }
 
-    internal VaultKeep Create(VaultKeep newVaultKeep)
+    internal VaultKeep Create(VaultKeep newVaultKeep, Profile userInfo)
     {
-      newVaultKeep.Id = _repo.Create(newVaultKeep);
-      return newVaultKeep;
+      Vault foundVault = _vaultService.GetOne(newVaultKeep.VaultId, userInfo);
+      if (foundVault.CreatorId == userInfo.Id)
+      {
+
+        newVaultKeep.Id = _repo.Create(newVaultKeep);
+        return newVaultKeep;
+      }
+      else
+      {
+        throw new Exception("Access Denied");
+
+      }
     }
 
     internal IEnumerable<VaultKeep> Get()
@@ -40,7 +53,8 @@ namespace keepr.Services
       }
       else
       {
-        return "Access Denied";
+        throw new Exception("Access Denied");
+
       }
     }
 

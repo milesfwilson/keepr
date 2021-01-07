@@ -49,12 +49,14 @@ namespace keepr.Services
         {
           return "Deleted!";
         }
-        return "Unable to be deleted";
+        throw new Exception("Unable to be deleted");
+
 
       }
       else
       {
-        return "Access Denied";
+        throw new Exception("Access Denied");
+
       }
     }
 

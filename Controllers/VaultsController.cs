@@ -57,7 +57,7 @@ namespace keepr.Controllers
     }
 
     [HttpGet("{id}")]
-    [Authorize]
+
 
     public async Task<ActionResult<Vault>> GetOne(int id)
     {

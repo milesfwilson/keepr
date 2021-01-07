@@ -1,7 +1,7 @@
 <template>
   <div class="vault-component">
-    <router-link :to="{name: 'ActiveVault', params: {vaultId: vault.id}}" class="text-dark" @click="setActiveVault(vault)">
-      <div class="m-2 p-3 shadow rounded border bg-light d-flex">
+    <router-link :to="{name: 'ActiveVault', params: {vaultId: vault.id}}" class="text-dark radius" @click="setActiveVault(vault)">
+      <div class="m-2 p-3 shadow bg-light d-flex radius grow">
         <h5 class="text-center text-dark my-auto">
           {{ vault.name }}
         </h5>
@@ -30,5 +30,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.radius {
+  border-radius: 25px;
+  text-decoration: none;
+}
 </style>
